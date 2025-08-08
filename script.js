@@ -9,14 +9,11 @@ const gameboard = (function() {
             });
     });
     const addToken = function(activePlayer, row, col) {
-        board.forEach(cell => {
-            if(cell.row === row && cell.column === col && cell.token === 0) {
-                cell.token = activePlayer.token;
-            };
-        });
+       const cell = getCell(row, col);
+       cell.token = cell.token === 0 ? activePlayer.token : cell.token;
     };
     const getCell = function(row, col) {
-        return board.find(cell => cell.row === row && cell.column === col)
+        return board.find(cell => cell.row === row && cell.column === col);
     };
     const getState = () => board;
     return {addToken, getCell, getState};
@@ -29,6 +26,26 @@ function playerFactory(name, token) {
 const playerOne = playerFactory("Player 1", 1);
 const playerTwo = playerFactory("Player 2", 2);
 
-function gameController(playerOne, playerTwo) {
-
-} 
+const game = (function() {
+    let activePlayer = playerOne;
+    const switchActivePlayer = () => {
+        activePlayer = activePlayer === playerOne ? playerTwo : playerOne;
+    };
+    const getActivePlayer = () => activePlayer;
+    const printNewRound = () => {
+        console.log(`It's ${activePlayer.name}'s turn.`);
+    };
+    const playRound = (row, col) => {
+        if(gameboard.getCell(row, col).token !== 0) {
+            console.log('That cell is taken. Please pick another one.')
+            printNewRound();
+            return;
+        };
+        gameboard.addToken(activePlayer, row, col);
+        console.log(`Marking cell row ${row} column ${col} as ${activePlayer.token}`);
+        switchActivePlayer();
+        printNewRound();
+        };
+    printNewRound();
+    return {playRound, getActivePlayer};
+})();
