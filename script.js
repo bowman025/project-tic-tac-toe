@@ -9,8 +9,7 @@ const gameboard = (function() {
             });
     });
     const addToken = function(activePlayer, row, col) {
-       const cell = getCell(row, col);
-       cell.token = cell.token === 0 ? activePlayer.token : cell.token;
+       getCell(row, col).token = activePlayer.token;
     };
     const getCell = function(row, col) {
         return board.find(cell => cell.row === row && cell.column === col);
