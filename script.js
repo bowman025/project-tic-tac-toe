@@ -27,12 +27,22 @@ const playerTwo = playerFactory("Player 2", 2);
 
 const game = (function() {
     let activePlayer = playerOne;
+    const cells = gameboard.getState();
     const switchActivePlayer = () => {
         activePlayer = activePlayer === playerOne ? playerTwo : playerOne;
     };
     const getActivePlayer = () => activePlayer;
     const printNewRound = () => {
         console.log(`It's ${activePlayer.name}'s turn.`);
+    };
+    const checkWinner = () => {
+        let activeCells = cells.filter(cell => cell.token === activePlayer.token);
+        console.log(activeCells);
+        if(activeCells.length >= 3) {
+            if(activeCells.filter(activeCell => activeCell.row === activeCell.row).length === 3 || activeCells.filter(activeCell => activeCell.column === activeCell.column).length === 3 || activeCells.filter(activeCell => activeCell.row === activeCell.column).length === 3 || cells[0].token === activePlayer.token && cells[4].token === activePlayer.token && cells[8].token === activePlayer.token) {
+                console.log(`${activePlayer.name} wins!`);
+            } else return;
+        };
     };
     const playRound = (row, col) => {
         if(gameboard.getCell(row, col).token !== 0) {
@@ -42,6 +52,7 @@ const game = (function() {
         };
         gameboard.addToken(activePlayer, row, col);
         console.log(`Marking cell row ${row} column ${col} as ${activePlayer.token}`);
+        checkWinner();
         switchActivePlayer();
         printNewRound();
         };
