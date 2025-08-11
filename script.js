@@ -38,11 +38,21 @@ const game = (function() {
     const checkWinner = () => {
         let activeCells = cells.filter(cell => cell.token === activePlayer.token);
         console.log(activeCells);
-        if(activeCells.length >= 3) {
-            if(activeCells.filter(activeCell => activeCell.row === activeCell.row).length === 3 || activeCells.filter(activeCell => activeCell.column === activeCell.column).length === 3 || activeCells.filter(activeCell => activeCell.row === activeCell.column).length === 3 || cells[0].token === activePlayer.token && cells[4].token === activePlayer.token && cells[8].token === activePlayer.token) {
+            if(activeCells.filter(activeCell => activeCell.row === 1).length === 3 ||
+            activeCells.filter(activeCell => activeCell.row === 2).length === 3 ||
+            activeCells.filter(activeCell => activeCell.row === 3).length === 3 ||
+            activeCells.filter(activeCell => activeCell.column === 1).length === 3 ||
+            activeCells.filter(activeCell => activeCell.column === 2).length === 3 ||
+            activeCells.filter(activeCell => activeCell.column === 3).length === 3 ||
+            cells[2].token === activePlayer.token && cells[4].token === activePlayer.token && cells[6].token === activePlayer.token ||
+            cells[0].token === activePlayer.token && cells[4].token === activePlayer.token && cells[8].token === activePlayer.token) {
                 console.log(`${activePlayer.name} wins!`);
-            } else return;
-        };
+            } else if((cells.filter(cell => cell.token !== 0)).length === 9) {
+                console.log("It's a tie!");
+            } else {
+                switchActivePlayer();
+                printNewRound();
+            };
     };
     const playRound = (row, col) => {
         if(gameboard.getCell(row, col).token !== 0) {
@@ -53,8 +63,6 @@ const game = (function() {
         gameboard.addToken(activePlayer, row, col);
         console.log(`Marking cell row ${row} column ${col} as ${activePlayer.token}`);
         checkWinner();
-        switchActivePlayer();
-        printNewRound();
         };
     printNewRound();
     return {playRound, getActivePlayer};
