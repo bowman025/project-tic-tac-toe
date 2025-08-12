@@ -32,6 +32,8 @@ const playerTwo = playerFactory("Player 2", "O");
 
 const gameController = (function() {
     let activePlayer = playerOne;
+    let playerOneScore = 0;
+    let playerTwoScore = 0;
     const cells = gameBoard.getState();
     const switchActivePlayer = () => {
         activePlayer = activePlayer === playerOne ? playerTwo : playerOne;
@@ -42,7 +44,6 @@ const gameController = (function() {
     };
     const checkWinner = () => {
         let activeCells = cells.filter(cell => cell.token === activePlayer.token);
-        console.log(activeCells);
         if(activeCells.filter(activeCell => activeCell.row === 1).length === 3 ||
         activeCells.filter(activeCell => activeCell.row === 2).length === 3 ||
         activeCells.filter(activeCell => activeCell.row === 3).length === 3 ||
@@ -52,7 +53,7 @@ const gameController = (function() {
         cells[2].token === activePlayer.token && cells[4].token === activePlayer.token && cells[6].token === activePlayer.token ||
         cells[0].token === activePlayer.token && cells[4].token === activePlayer.token && cells[8].token === activePlayer.token) {
             console.log(`${activePlayer.name} wins!`);
-            return `${activePlayer.name} wins!`;
+            return activePlayer;
         } else if((cells.filter(cell => cell.token !== null)).length === 9) {
             console.log("It's a tie!");
             return "It's a tie!";
@@ -68,9 +69,14 @@ const gameController = (function() {
         };
         gameBoard.addToken(activePlayer, row, col);
         console.log(`Marking cell row ${row} column ${col} as ${activePlayer.token}`);
-        if (checkWinner() === false) {
+        if(checkWinner() === false) {
             switchActivePlayer();
             printNewRound();
+        };
+        if(checkWinner() === playerOne) {
+            playerOneScore++;
+        } else if(checkWinner() === playerTwo) {
+            playerTwoScore++;
         };
     };
     const resetGame = () => {
@@ -79,8 +85,11 @@ const gameController = (function() {
         const cells = gameBoard.getState();
         printNewRound();
     };
+    const checkScore = () => {
+        return {playerOneScore, playerTwoScore};
+    };
     printNewRound();
-    return {playRound, getActivePlayer, checkWinner, resetGame};
+    return {playRound, getActivePlayer, checkWinner, checkScore, resetGame};
 })();
 
 const displayController = (function() {
@@ -97,15 +106,24 @@ const displayController = (function() {
             boardDiv.appendChild(cellDiv);
             cellDiv.addEventListener("click", () => {
                 gameController.playRound(cell.row, cell.column);
-                cellDiv.textContent = cell.token;
+                if(cell.token === "X") {
+                    cellDiv.innerHTML = `<img src=assets/x.svg alt="X">`
+                } else if(cell.token === "O") {
+                    cellDiv.innerHTML = `<img src=assets/circle.svg alt="O">`
+                };
                 activePlayer = gameController.getActivePlayer();
                 playerTurnDiv.textContent = `It's ${activePlayer.name}'s turn.`;
-                if(gameController.checkWinner() !== false) {
-                    playerTurnDiv.textContent = gameController.checkWinner();
+                if(gameController.checkWinner() === activePlayer || gameController.checkWinner() === "It's a tie!") {
                     let overlay = document.createElement("div");
                     overlay.classList.add("overlay");
                     document.querySelector(".board").appendChild(overlay);
                     resetScreen();
+                    if(gameController.checkWinner() === activePlayer) {
+                        let winningPlayer = activePlayer;
+                        playerTurnDiv.textContent = `${winningPlayer.name} wins!`;
+                    } else if(gameController.checkWinner() === "It's a tie!") {
+                    playerTurnDiv.textContent = "It's a tie!";
+                    };
                 };
             });
         });
