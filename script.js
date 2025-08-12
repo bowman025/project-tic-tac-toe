@@ -111,16 +111,16 @@ const displayController = (function() {
         });
     };
     const resetScreen = () => {
-        const resetButton = document.createElement("button");
-        resetButton.classList.add("reset");
-        resetButton.textContent = "Play again";
-        container.appendChild(resetButton);
-        resetButton.addEventListener("click", () => {
+        const restartButton = document.createElement("button");
+        restartButton.classList.add("restart");
+        restartButton.textContent = "Play again";
+        container.appendChild(restartButton);
+        restartButton.addEventListener("click", () => {
             gameController.resetGame();
             while(boardDiv.firstChild) {
                 boardDiv.removeChild(boardDiv.firstChild);
             };
-            container.removeChild(resetButton);
+            container.removeChild(restartButton);
             updateScreen();
         });
     };

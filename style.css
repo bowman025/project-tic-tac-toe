@@ -83,18 +83,18 @@ h1, h2, h3, h4, h5, h6 {
     background-color: rgba(0,0,0,0);
 }
 
-.reset {
+.restart {
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
     background-color: #D6C742;
 }
 
-.reset:hover {
+.restart:hover {
     background-color: #57C785;
 }
 
-.reset:active {
+.restart:active {
     background-color: #57C785;
     outline: 2px inset #3f9161;
 }
