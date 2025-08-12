@@ -15,7 +15,12 @@ const gameBoard = (function() {
         return board.find(cell => cell.row === row && cell.column === col);
     };
     const getState = () => board;
-    return {addToken, getCell, getState};
+    const clearBoard = () => {
+        board.forEach(cell => {
+            cell.token = null;
+        });
+    }
+    return {addToken, getCell, getState, clearBoard};
 })();
 
 function playerFactory(name, token) {
@@ -46,7 +51,7 @@ const gameController = (function() {
         activeCells.filter(activeCell => activeCell.column === 3).length === 3 ||
         cells[2].token === activePlayer.token && cells[4].token === activePlayer.token && cells[6].token === activePlayer.token ||
         cells[0].token === activePlayer.token && cells[4].token === activePlayer.token && cells[8].token === activePlayer.token) {
-            console.log(`${activePlayer.name} wins!`)
+            console.log(`${activePlayer.name} wins!`);
             return `${activePlayer.name} wins!`;
         } else if((cells.filter(cell => cell.token !== null)).length === 9) {
             console.log("It's a tie!");
@@ -68,11 +73,18 @@ const gameController = (function() {
             printNewRound();
         };
     };
+    const resetGame = () => {
+        gameBoard.clearBoard();
+        activePlayer = playerOne;
+        const cells = gameBoard.getState();
+        printNewRound();
+    };
     printNewRound();
-    return {playRound, getActivePlayer, checkWinner, printNewRound};
+    return {playRound, getActivePlayer, checkWinner, resetGame};
 })();
 
 const displayController = (function() {
+    const container = document.querySelector(".container");
     const boardDiv = document.querySelector(".board");
     const playerTurnDiv = document.querySelector(".turn");
     const updateScreen = () => {
@@ -87,14 +99,29 @@ const displayController = (function() {
                 gameController.playRound(cell.row, cell.column);
                 cellDiv.textContent = cell.token;
                 activePlayer = gameController.getActivePlayer();
-                playerTurnDiv.textContent = `It's ${activePlayer.name}'s turn.`
+                playerTurnDiv.textContent = `It's ${activePlayer.name}'s turn.`;
                 if(gameController.checkWinner() !== false) {
                     playerTurnDiv.textContent = gameController.checkWinner();
                     let overlay = document.createElement("div");
                     overlay.classList.add("overlay");
                     document.querySelector(".board").appendChild(overlay);
+                    resetScreen();
                 };
             });
+        });
+    };
+    const resetScreen = () => {
+        const resetButton = document.createElement("button");
+        resetButton.classList.add("reset");
+        resetButton.textContent = "Play again";
+        container.appendChild(resetButton);
+        resetButton.addEventListener("click", () => {
+            gameController.resetGame();
+            while(boardDiv.firstChild) {
+                boardDiv.removeChild(boardDiv.firstChild);
+            };
+            container.removeChild(resetButton);
+            updateScreen();
         });
     };
     updateScreen();
