@@ -107,15 +107,26 @@ const displayController = (function() {
         playerTwoScoreDiv.textContent = playerTwoScore;
     };
     const editPlayerName = () => {
+        
         const playerOneNameDiv = document.querySelector(".name-1");
         playerOneNameDiv.addEventListener("click", () => {
-            playerOne.name = prompt("What is your name?");
+            let userName = prompt("What is your name?");
+            if (userName === null || userName === "") {
+                return;
+            } else {
+            playerOne.name = userName;
             playerOneNameDiv.textContent = playerOne.name;
+            };
         });
         const playerTwoNameDiv = document.querySelector(".name-2");
         playerTwoNameDiv.addEventListener("click", () => {
-            playerTwo.name = prompt("What is your name?");
+            let userName = prompt("What is your name?");
+            if (userName === null || userName === "") {
+                return;
+            } else {
+            playerTwo.name = userName;
             playerTwoNameDiv.textContent = playerTwo.name;
+            };
         });
     };
     const resetScreen = () => {
@@ -137,10 +148,10 @@ const displayController = (function() {
         const playerTwoDiv = document.querySelector(".score-2");
         activePlayer = gameController.getActivePlayer();
         if(activePlayer === playerOne) {
-            playerOneDiv.style.outline = "2px solid whitesmoke";
+            playerOneDiv.style.outline = "4px solid whitesmoke";
             playerTwoDiv.style.outline = "none";
         } else if(activePlayer === playerTwo) {
-            playerTwoDiv.style.outline = "2px solid whitesmoke";
+            playerTwoDiv.style.outline = "4px solid whitesmoke";
             playerOneDiv.style.outline = "none";
         } else {
             playerOneDiv.style.outline = "none";

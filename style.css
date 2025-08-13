@@ -14,7 +14,7 @@ body {
     height: 100vh;
     justify-content: center;
     align-items: start;
-    background-image: linear-gradient(90deg, #db5d4f, #4f8cdb);
+    background-image: linear-gradient(90deg, #5de8a5, #dae85d);
 }
 
 img, picture, video, canvas, svg {
@@ -56,12 +56,16 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 200px;
 }
 
+.score > img {
+    padding: 0px 10px;
+}
+
 .score-1 {
-    background-color: #e24545;
+    background-color: #5de8a5;
 }
 
 .score-2 {
-    background-color: #4545e2;
+    background-color: #dae85d;
 }
 
 .player-one-score,
@@ -78,11 +82,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .name:hover {
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(255, 255, 255, 0.55);
 }
 
 .name:active {
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(255, 255, 255, 0.77);
 }
 
 .main {
@@ -93,7 +97,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .title {
     margin-bottom: 20px;
-    background-image: linear-gradient(90deg, #db5d4f, #4f8cdb);
+    background-image: linear-gradient(90deg, #5de8a5, #dae85d);
     box-shadow: 4px 4px 2px rgba(0,0,0,0.5);
 }
 
@@ -103,7 +107,7 @@ h1, h2, h3, h4, h5, h6 {
     grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
     width: 100%;
     margin-top: 20px;
-    background-image: linear-gradient(90deg, #db5d4f, #4f8cdb);
+    background-image: linear-gradient(90deg, #5de8a5, #dae85d);
     box-shadow: 6px 6px 2px rgba(0,0,0,0.5);
 }
 
@@ -115,6 +119,7 @@ h1, h2, h3, h4, h5, h6 {
     min-height: 104px;
     border: 1px solid rgb(49, 49, 49);
     font-size: 4rem;
+    background-color: none;
 }
 
 .cell-0,
@@ -142,7 +147,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .cell:hover {
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+.cell:active {
+    background-color: rgba(255, 255, 255, 0.77);
 }
 
 .overlay {
@@ -162,7 +171,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 10px 20px;
     margin-top: 20px;
     font-size: 24px;
-    background-color: #db5d4f;
+    background-color: #dae85d;
     border-radius: 8px;
     box-shadow: 4px 4px 2px rgba(0,0,0,0.5);
     outline: none;
@@ -170,10 +179,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .restart:hover {
-    background-color: #4f8cdb;
+    background-color: #5de8a5;
 }
 
 .restart:active {
-    background-color: #4f8cdb;
-    border: 1px inset #4f8cdb;
+    background-color: #5de8a5;
+    border: 1px inset #5de8a5;
 }
