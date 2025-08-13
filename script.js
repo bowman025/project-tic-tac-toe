@@ -93,7 +93,7 @@ const gameController = (function() {
 })();
 
 const displayController = (function() {
-    const container = document.querySelector(".container");
+    const main = document.querySelector(".main");
     const boardDiv = document.querySelector(".board");
     const playerTurnDiv = document.querySelector(".turn");
     const updateScreen = () => {
@@ -107,9 +107,9 @@ const displayController = (function() {
             cellDiv.addEventListener("click", () => {
                 gameController.playRound(cell.row, cell.column);
                 if(cell.token === "X") {
-                    cellDiv.innerHTML = `<img src=assets/x.svg alt="X">`
+                    cellDiv.innerHTML = `<img src=assets/x.svg alt="X">`;
                 } else if(cell.token === "O") {
-                    cellDiv.innerHTML = `<img src=assets/circle.svg alt="O">`
+                    cellDiv.innerHTML = `<img src=assets/circle.svg alt="O">`;
                 };
                 activePlayer = gameController.getActivePlayer();
                 playerTurnDiv.textContent = `It's ${activePlayer.name}'s turn.`;
@@ -117,6 +117,7 @@ const displayController = (function() {
                     let overlay = document.createElement("div");
                     overlay.classList.add("overlay");
                     document.querySelector(".board").appendChild(overlay);
+                    displayScore();
                     resetScreen();
                     if(gameController.checkWinner() === activePlayer) {
                         let winningPlayer = activePlayer;
@@ -132,15 +133,24 @@ const displayController = (function() {
         const restartButton = document.createElement("button");
         restartButton.classList.add("restart");
         restartButton.textContent = "Play again";
-        container.appendChild(restartButton);
+        main.appendChild(restartButton);
         restartButton.addEventListener("click", () => {
             gameController.resetGame();
             while(boardDiv.firstChild) {
                 boardDiv.removeChild(boardDiv.firstChild);
             };
-            container.removeChild(restartButton);
+            main.removeChild(restartButton);
             updateScreen();
         });
+    };
+    const displayScore = () => {
+        const currentScore = gameController.checkScore();
+        const playerOneScore = currentScore.playerOneScore;
+        const playerOneScoreDiv = document.querySelector(".player-one-score");
+        playerOneScoreDiv.textContent = playerOneScore;
+        const playerTwoScore = currentScore.playerTwoScore;
+        const playerTwoScoreDiv = document.querySelector(".player-two-score");
+        playerTwoScoreDiv.textContent = playerTwoScore;
     };
     updateScreen();
 })();

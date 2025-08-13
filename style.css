@@ -39,9 +39,44 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .container {
-    margin: 25px;
-    padding: 25px;
-    min-width: 460px;
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: stretch;
+    min-width: 450px;
+    max-width: 600px;
+    margin: 40px;
+}
+
+.score {
+    display: grid;
+    grid-template-rows: 1fr 1fr 2fr;
+    border: 1px solid rgb(49, 49, 49);
+    justify-items: center;
+    padding: 20px;
+    box-shadow: 4px 4px 2px rgba(0,0,0,0.5);
+}
+
+.score-1 {
+    background-image: linear-gradient(90deg, #57C785, #D6C742);
+}
+
+.score-2 {
+    background-image: linear-gradient(90deg, #57C785, #D6C742);
+}
+
+.player-one-score,
+.player-two-score {
+    font-size: 3rem;
+}
+
+.name {
+    font-size: 1.4rem;
+}
+
+.main {
+    position: relative;
+    padding: 0px 25px;
     text-align: center;
 }
 
@@ -62,7 +97,8 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     display: grid;
     grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
-    margin: 20px 0px;
+    width: 100%;
+    margin-top: 20px;
     border: 1px solid rgb(49, 49, 49);
     background-image: linear-gradient(90deg, #57C785, #D6C742);
     box-shadow: 6px 6px 2px rgba(0,0,0,0.5);
@@ -72,10 +108,15 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 120px;
-    min-height: 120px;
+    min-width: 84px;
+    min-height: 84px;
     border: 1px solid rgb(49, 49, 49);
     font-size: 4rem;
+
+}
+
+.cell:hover {
+    background-color: rgba(0,0,0,0.1);
 }
 
 .overlay {
@@ -89,7 +130,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .restart {
+    position: absolute;
+    top: 100%;
+    left: 25%;
     padding: 10px 20px;
+    margin-top: 20px;
     font-size: 24px;
     background-color: #D6C742;
     border: 1px solid rgb(49, 49, 49);
