@@ -72,11 +72,15 @@ const gameController = (function() {
         if(checkWinner() === false) {
             switchActivePlayer();
             printNewRound();
-        };
-        if(checkWinner() === playerOne) {
+        } else {
+            if(checkWinner() === playerOne) {
             playerOneScore++;
-        } else if(checkWinner() === playerTwo) {
+            } else if(checkWinner() === playerTwo) {
             playerTwoScore++;
+            } else if(checkWinner() === "It's a tie!") {
+            return;
+            };
+            activePlayer = null;
         };
     };
     const resetGame = () => {
@@ -95,38 +99,25 @@ const gameController = (function() {
 const displayController = (function() {
     const main = document.querySelector(".main");
     const boardDiv = document.querySelector(".board");
-    const playerTurnDiv = document.querySelector(".turn");
-    const updateScreen = () => {
-        const cells = gameBoard.getState();
-        let activePlayer = gameController.getActivePlayer();
-        playerTurnDiv.textContent = `It's ${activePlayer.name}'s turn.`
-        cells.forEach((cell, index) => {
-            const cellDiv = document.createElement("div");
-            cellDiv.classList.add("cell", `cell-${index}`);
-            boardDiv.appendChild(cellDiv);
-            cellDiv.addEventListener("click", () => {
-                gameController.playRound(cell.row, cell.column);
-                if(cell.token === "X") {
-                    cellDiv.innerHTML = `<img src=assets/x.svg alt="X">`;
-                } else if(cell.token === "O") {
-                    cellDiv.innerHTML = `<img src=assets/circle.svg alt="O">`;
-                };
-                activePlayer = gameController.getActivePlayer();
-                playerTurnDiv.textContent = `It's ${activePlayer.name}'s turn.`;
-                if(gameController.checkWinner() === activePlayer || gameController.checkWinner() === "It's a tie!") {
-                    let overlay = document.createElement("div");
-                    overlay.classList.add("overlay");
-                    document.querySelector(".board").appendChild(overlay);
-                    displayScore();
-                    resetScreen();
-                    if(gameController.checkWinner() === activePlayer) {
-                        let winningPlayer = activePlayer;
-                        playerTurnDiv.textContent = `${winningPlayer.name} wins!`;
-                    } else if(gameController.checkWinner() === "It's a tie!") {
-                    playerTurnDiv.textContent = "It's a tie!";
-                    };
-                };
-            });
+    const displayScore = () => {
+        const currentScore = gameController.checkScore();
+        const playerOneScore = currentScore.playerOneScore;
+        const playerOneScoreDiv = document.querySelector(".player-one-score");
+        playerOneScoreDiv.textContent = playerOneScore;
+        const playerTwoScore = currentScore.playerTwoScore;
+        const playerTwoScoreDiv = document.querySelector(".player-two-score");
+        playerTwoScoreDiv.textContent = playerTwoScore;
+    };
+    const editPlayerName = () => {
+        const playerOneNameDiv = document.querySelector(".name-1");
+        playerOneNameDiv.addEventListener("click", () => {
+            playerOne.name = prompt("What is your name?");
+            playerOneNameDiv.textContent = playerOne.name;
+        });
+        const playerTwoNameDiv = document.querySelector(".name-2");
+        playerTwoNameDiv.addEventListener("click", () => {
+            playerTwo.name = prompt("What is your name?");
+            playerTwoNameDiv.textContent = playerTwo.name;
         });
     };
     const resetScreen = () => {
@@ -143,14 +134,48 @@ const displayController = (function() {
             updateScreen();
         });
     };
-    const displayScore = () => {
-        const currentScore = gameController.checkScore();
-        const playerOneScore = currentScore.playerOneScore;
-        const playerOneScoreDiv = document.querySelector(".player-one-score");
-        playerOneScoreDiv.textContent = playerOneScore;
-        const playerTwoScore = currentScore.playerTwoScore;
-        const playerTwoScoreDiv = document.querySelector(".player-two-score");
-        playerTwoScoreDiv.textContent = playerTwoScore;
+    const highlightActivePlayer = function(activePlayer) {
+        const playerOneDiv = document.querySelector(".score-1");
+        const playerTwoDiv = document.querySelector(".score-2");
+        activePlayer = gameController.getActivePlayer();
+        if(activePlayer === playerOne) {
+            playerOneDiv.style.outline = "2px solid whitesmoke";
+            playerTwoDiv.style.outline = "none";
+        } else if(activePlayer === playerTwo) {
+            playerTwoDiv.style.outline = "2px solid whitesmoke";
+            playerOneDiv.style.outline = "none";
+        } else {
+            playerOneDiv.style.outline = "none";
+            playerTwoDiv.style.outline = "none";
+        };
     };
+    const updateScreen = () => {
+        const cells = gameBoard.getState();
+        let activePlayer = gameController.getActivePlayer();
+        highlightActivePlayer(activePlayer);
+        cells.forEach((cell, index) => {
+            const cellDiv = document.createElement("div");
+            cellDiv.classList.add("cell", `cell-${index}`);
+            boardDiv.appendChild(cellDiv);
+            cellDiv.addEventListener("click", () => {
+                gameController.playRound(cell.row, cell.column);
+                if(cell.token === "X" && cellDiv.hasChildNodes() === false) {
+                    cellDiv.insertAdjacentHTML('afterbegin', `<img src=assets/x.svg alt="X">`);
+                } else if(cell.token === "O" && cellDiv.hasChildNodes() === false) {
+                    cellDiv.insertAdjacentHTML('afterbegin', `<img src=assets/circle.svg alt="O">`);
+                };
+                highlightActivePlayer(activePlayer);
+                if(gameController.getActivePlayer() === null) {
+                    highlightActivePlayer(activePlayer);
+                    let overlay = document.createElement("div");
+                    overlay.classList.add("overlay");
+                    document.querySelector(".board").appendChild(overlay);
+                    displayScore();
+                    resetScreen();
+                };
+            });
+        });
+    };
+    editPlayerName();
     updateScreen();
 })();
