@@ -77,8 +77,6 @@ const gameController = (function() {
             playerOneScore++;
             } else if(checkWinner() === playerTwo) {
             playerTwoScore++;
-            } else if(checkWinner() === "It's a tie!") {
-            return;
             };
             activePlayer = null;
         };
